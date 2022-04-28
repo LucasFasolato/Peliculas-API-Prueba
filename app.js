@@ -2,6 +2,7 @@ let pagina = 1;
 const btnAnterior = document.getElementById('btnAnterior');
 const btnSiguiente = document.getElementById('btnSiguiente');
 const modalBody = document.getElementById('modal-body');
+const modalFooter = document.getElementById('modal-footer');
 const btnClose = document.getElementById('btnClose');
 btnClose.addEventListener('click',  () => closeModal ());
 
@@ -16,6 +17,7 @@ function closeModal () {
     const duracion = document.getElementById("duracion-datos");
     const tagline = document.getElementById("tagline-datos");
     const valoracion = document.getElementById("valoracion-datos");
+    const mirarAhora = document.getElementById('mirarAhora-datos');
     console.log(document.body.contains(document.getElementById("duracion-datos")));
     if (document.body.contains(document.getElementById("duracion-datos"))){
         if (document.body.contains(document.getElementById("idioma-datos"))) {
@@ -24,6 +26,9 @@ function closeModal () {
         modalBody.removeChild(duracion);   
         document.getElementById('modal-header').removeChild(tagline);
         modalBody.removeChild(valoracion);
+        if (document.body.contains(document.getElementById("mirarAhora-datos"))) {
+            modalFooter.removeChild(mirarAhora);
+        }  
     }
     document.getElementById('modalSheet').setAttribute("style", "background-image: none"); 
 }
@@ -75,18 +80,20 @@ async function openModal (id) {
         valoracion.innerHTML = `Valoracion: ${datos.vote_average}`;
         valoracion.setAttribute('id', "valoracion-datos");
         modalBody.appendChild(valoracion);
-        // parrafo.innerHTML = "HOLA";
-        // parrafo.setAttribute('id', "parrafo-datos");
-        // const img = document.createElement("img");
-        // img.setAttribute('id', "img-datos");
-        // img.src = `https://image.tmdb.org/t/p/w500/${datos.backdrop_path}`;
-        // img.alt = "FONDO"
-        // let modall = document.getElementById('modalSheet');
-        // modall.setAttribute('style', `backgroundImage = url ("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}")`);
+
+        const mirarAhora = document.createElement("a");
+        mirarAhora.setAttribute('href', `${datos.homepage}`);
+        mirarAhora.setAttribute('target', "_blank");
+        mirarAhora.setAttribute('id', "mirarAhora-datos");
+        modalFooter.appendChild(mirarAhora);
+
+        const buttonMirarAhora = document.createElement("button");
+        buttonMirarAhora.setAttribute('type', "button");
+        buttonMirarAhora.setAttribute('class', "btn btn-lg btn-primary w-100 mx-0 mb-2");
+        buttonMirarAhora.innerHTML = "MIRAR AHORA";
+        mirarAhora.appendChild(buttonMirarAhora);
+        
         document.getElementById('modalSheet').setAttribute("style", `background-image: url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
-        // modalBody.appendChild(parrafo);
-        // modalBody.appendChild(img);
-        // document.getElementById('modalSheet').style.backgroundImage ="url (`https://image.tmdb.org/t/p/w500/${datos.backdrop_path}`)";
         document.getElementById('modal-title').innerHTML = datos.title;
         document.getElementById('modal-info-peli').innerHTML = datos.overview;
         document.getElementById('modalSheet').classList.add(isVisible);      
@@ -95,12 +102,6 @@ async function openModal (id) {
     }  
       
 }
-
-// function closeModal () {
-//     const isVisible = "is-visible";
-//     console.log("CERRANDO...");
-//     document.getElementById('modalSheet').classList.remove(isVisible);
-// }
 
 const cargarPeliculas = async () => {
     try {
@@ -112,7 +113,6 @@ const cargarPeliculas = async () => {
             const datos = await respuesta.json();
             console.log(datos);
             total_pages = datos.total_pages;
-            // href="./pelicula-info.html?id=${pelicula.id}"
             datos.results.forEach(pelicula => {
                 peliculas += `
                 <div class="pelicula" id=${pelicula.id}>
@@ -124,9 +124,6 @@ const cargarPeliculas = async () => {
                 </div>
                 `;
             });
-            // pelicula.addEventListener('click', function () {
-            //     window.location.href=`./pelicula-info.html`
-            // })
             document.getElementById('contenedor').innerHTML = peliculas;
 
         } else if(respuesta.status === 401) {

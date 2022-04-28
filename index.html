@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script defer src="app.js"></script>
+    <script
+      defer
+      src="./../../../../Lucas Fasolato/Downloads/Bootstrap/bootstrap-5.1.3-examples/assets/dist/js/bootstrap.bundle.min.js"
+    ></script>
     <meta name="description" content="" />
     <meta
       name="author"
@@ -18,21 +23,6 @@
       href="file:C:/Users/Lucas%20Fasolato/Downloads/Bootstrap/bootstrap-5.1.3-examples/assets/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
 
     <!-- Custom styles for this template -->
     <link href="modal.css" rel="stylesheet" />
@@ -75,12 +65,9 @@
             <p id="modal-info-peli">INFO SOBRE LA PELI</p>
           </div>
           <div class="modal-footer flex-column border-top-0">
-            <button
-              type="button"
-              class="btn btn-lg btn-primary w-100 mx-0 mb-2"
-            >
-              MIRAR AHORA
-            </button>
+            <div id="modal-footer">
+              
+            </div>
             <button
               type="button"
               class="btn btn-lg btn-light w-100 mx-0"
@@ -100,9 +87,20 @@
       <button id="btnAnterior">Anterior</button>
       <button id="btnSiguiente">Siguiente</button>
     </div>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-    <script src="app.js"></script>
-    <script src="pelicula-info.js"></script>
-    <script src="./../../../../Lucas Fasolato/Downloads/Bootstrap/bootstrap-5.1.3-examples/assets/dist/js/bootstrap.bundle.min.js"></script>
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
   </body>
 </html>

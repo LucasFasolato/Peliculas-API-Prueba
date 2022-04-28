@@ -1,6 +1,6 @@
 .display-modal {
   position: fixed;
-  top: 0px;
+  top: -150px;
   left: 0px;
   visibility: hidden;
   opacity: 0;
