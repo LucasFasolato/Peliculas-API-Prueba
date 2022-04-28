@@ -71,8 +71,13 @@ async function openModal (id) {
             }
             return element
         }
-        function bodyChild(input = []) {
-            input.forEach(x=> modalBody.appendChild(x))
+        function apChilds(input = []) {
+            //input.forEach(x=> modalBody.appendChild(x))
+            for (let i = 0; i < input.length; i++) {
+                for (let j = 0; j < input[i].length; j++) {
+                    j == 0 ? j : input[i][0].appendChild(input[i][j])
+                }
+            }
         }
 
         let idioma;
@@ -80,26 +85,9 @@ async function openModal (id) {
         const tagline = newElement('h6',datos.tagline,['id','tagline-datos'])
         const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos'])
         const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos'])
-        
-        modalHeader.appendChild(tagline);
-        bodyChild([idioma,duracion,valoracion])
-
-        //const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos"])
-
-        const mirarAhora = document.createElement("a");
-        mirarAhora.setAttribute('href', `${datos.homepage}`);
-        mirarAhora.setAttribute('target', "_blank");
-        mirarAhora.setAttribute('id', "mirarAhora-datos");
-        //modalFooter.appendChild(mirarAhora);
-
-
-        //const mirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"])
-
-        const buttonMirarAhora = document.createElement("button");
-        buttonMirarAhora.setAttribute('type', "button");
-        buttonMirarAhora.setAttribute('class', "btn btn-lg btn-primary w-100 mx-0 mb-2");
-        buttonMirarAhora.innerHTML = "MIRAR AHORA";
-        //mirarAhora.appendChild(buttonMirarAhora);
+        const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos"])
+        const buttonMirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"])
+        apChilds([[modalBody,idioma,duracion,valoracion],[modalHeader,tagline],[modalFooter,mirarAhora],[mirarAhora,buttonMirarAhora]])
         
         getId('modal-title').innerHTML = datos.title;
         getId('modal-info-peli').innerHTML = datos.overview;
@@ -115,12 +103,10 @@ async function openModal (id) {
 const cargarPeliculas = async () => {
     try {
         const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
-        console.log(respuesta);
         
         if(respuesta.status === 200) {
             let peliculas = '';
             const datos = await respuesta.json();
-            console.log(datos);
             total_pages = datos.total_pages;
             datos.results.forEach(pelicula => {
                 peliculas += `
