@@ -1,14 +1,8 @@
 //-- Variables --------------------------------------------------------------------------------------------
 
-const btnAnterior = getId('btnAnterior');
-const btnSiguiente = getId('btnSiguiente');
-const modalBody = getId('modal-body');
-const modalFooter = getId('modal-footer');
-const btnClose = getId('btnClose');
-const btnBack = getId('btnBack');
-let pagina = 1;
-let total_pages;
-let num=0;
+const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
+       modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack');
+let pagina = 1, total_pages, num=0;
 
 //-- Events --------------------------------------------------------------------------------------------
 
@@ -70,33 +64,27 @@ function closeModal () {
 async function openModal (id) {
     try {
         const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR`);
-        console.log(resp);
         const datos = await resp.json();
-        console.log(datos);
         const isVisible = "is-visible";
-        console.log("ABRIENDO...");
 
-        const tagline = document.createElement("h6");
-        tagline.innerHTML = `${datos.tagline}`;
-        tagline.setAttribute('id', "tagline-datos");
-        getId('modal-header').appendChild(tagline);
-
-        const idioma = document.createElement("p");
-        if (datos.original_language === "en") {
-            idioma.innerHTML = "Idioma original: Inglés";
-            idioma.setAttribute('id', "idioma-datos");
-            modalBody.appendChild(idioma);
+        function newElement(domElement,info,attributes) {
+            const element = document.createElement(domElement);
+            element.innerHTML = `${info}`;
+            element.setAttribute(attributes[0],attributes[1])
+            return element
+        }
+        function bodyChild(input = []) {
+            input.forEach(x=> modalBody.appendChild(x))
         }
 
-        const duracion = document.createElement("p");
-        duracion.innerHTML = timeFormat(datos.runtime)
-        duracion.setAttribute('id', "duracion-datos");
-        modalBody.appendChild(duracion);
+        let idioma;
+        (datos.original_language === "en") ? idioma = newElement('p',"Idioma original: Inglés",['id','idioma-datos']) : idioma
+        const tagline = newElement('h6',datos.tagline,['id','tagline-datos'])
+        const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos'])
+        const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos'])
         
-        const valoracion = document.createElement("p");
-        valoracion.innerHTML = `Valoracion: ${datos.vote_average}`;
-        valoracion.setAttribute('id', "valoracion-datos");
-        modalBody.appendChild(valoracion);
+        getId('modal-header').appendChild(tagline);
+        bodyChild([idioma,duracion,valoracion])
 
         // const mirarAhora = document.createElement("a");
         // mirarAhora.setAttribute('href', `${datos.homepage}`);
@@ -117,7 +105,6 @@ async function openModal (id) {
     } catch (error) {
         console.log(error);
     }  
-      
 }
 
 //----------------------------------------------------------------------------------------------
@@ -157,8 +144,6 @@ const cargarPeliculas = async () => {
     }
     
 }
-
-
 
 cargarPeliculas ();
 
