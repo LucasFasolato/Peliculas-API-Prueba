@@ -1,7 +1,8 @@
 //-- Variables --------------------------------------------------------------------------------------------
 
 const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
-       modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack');
+       modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack'), 
+       modalHeader = getId('modal-header'), modalSheet = getId('modalSheet');
 let pagina = 1, total_pages, num=0;
 
 //-- Events --------------------------------------------------------------------------------------------
@@ -37,27 +38,22 @@ function timeFormat(time) {
 }
 
 function closeModal () {
-    const isVisible = "is-visible";
-    console.log("CERRANDO...");
-    getId('modalSheet').classList.remove(isVisible);
-    const idioma = getId("idioma-datos");
-    const duracion = getId("duracion-datos");
-    const tagline = getId("tagline-datos");
-    const valoracion = getId("valoracion-datos");
-    const mirarAhora = getId('mirarAhora-datos');
+    const isVisible = "is-visible", idioma = getId("idioma-datos"), duracion = getId("duracion-datos"), 
+        tagline = getId("tagline-datos"), valoracion = getId("valoracion-datos"), mirarAhora = getId('mirarAhora-datos');
+    modalSheet.classList.remove(isVisible);
     if (document.body.contains(duracion)){
         if (document.body.contains(idioma)) {
             modalBody.removeChild(idioma);
         }
         modalBody.removeChild(duracion);   
-        getId('modal-header').removeChild(tagline);
+        modalHeader.removeChild(tagline);
         modalBody.removeChild(valoracion);
         if (document.body.contains(mirarAhora)) {
             modalFooter.removeChild(mirarAhora);
         }  
     }
-    getId('modalSheet').setAttribute("style", "background-image: none"); 
-}
+    modalSheet.setAttribute("style", "background-image: none"); 
+} 
 
 //----------------------------------------------------------------------------------------------
   
@@ -69,8 +65,10 @@ async function openModal (id) {
 
         function newElement(domElement,info,attributes) {
             const element = document.createElement(domElement);
-            element.innerHTML = `${info}`;
-            element.setAttribute(attributes[0],attributes[1])
+            info === '' ? info : element.innerHTML = `${info}`;
+            for (let i = 0; i < attributes.length; i+=2) {
+                element.setAttribute(attributes[i],attributes[i+1])
+            }
             return element
         }
         function bodyChild(input = []) {
@@ -83,25 +81,30 @@ async function openModal (id) {
         const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos'])
         const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos'])
         
-        getId('modal-header').appendChild(tagline);
+        modalHeader.appendChild(tagline);
         bodyChild([idioma,duracion,valoracion])
 
-        // const mirarAhora = document.createElement("a");
-        // mirarAhora.setAttribute('href', `${datos.homepage}`);
-        // mirarAhora.setAttribute('target', "_blank");
-        // mirarAhora.setAttribute('id', "mirarAhora-datos");
-        // modalFooter.appendChild(mirarAhora);
+        //const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos"])
 
-        // const buttonMirarAhora = document.createElement("button");
-        // buttonMirarAhora.setAttribute('type', "button");
-        // buttonMirarAhora.setAttribute('class', "btn btn-lg btn-primary w-100 mx-0 mb-2");
-        // buttonMirarAhora.innerHTML = "MIRAR AHORA";
-        // mirarAhora.appendChild(buttonMirarAhora);
+        const mirarAhora = document.createElement("a");
+        mirarAhora.setAttribute('href', `${datos.homepage}`);
+        mirarAhora.setAttribute('target', "_blank");
+        mirarAhora.setAttribute('id', "mirarAhora-datos");
+        //modalFooter.appendChild(mirarAhora);
+
+
+        //const mirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"])
+
+        const buttonMirarAhora = document.createElement("button");
+        buttonMirarAhora.setAttribute('type', "button");
+        buttonMirarAhora.setAttribute('class', "btn btn-lg btn-primary w-100 mx-0 mb-2");
+        buttonMirarAhora.innerHTML = "MIRAR AHORA";
+        //mirarAhora.appendChild(buttonMirarAhora);
         
-        getId('modalSheet').setAttribute("style", `background-image: url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
         getId('modal-title').innerHTML = datos.title;
         getId('modal-info-peli').innerHTML = datos.overview;
-        getId('modalSheet').classList.add(isVisible);      
+        modalSheet.setAttribute("style", `background-image: url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
+        modalSheet.classList.add(isVisible);      
     } catch (error) {
         console.log(error);
     }  
