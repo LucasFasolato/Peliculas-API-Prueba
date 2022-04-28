@@ -1,11 +1,11 @@
-//-- Variables --------------------------------------------------------------------------------------------
+//-- Variables --------------------------------------------------------------------------------------------------------------
 
 const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
        modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack'), 
        modalHeader = getId('modal-header'), modalSheet = getId('modalSheet');
 let pagina = 1, total_pages, num=0;
 
-//-- Events --------------------------------------------------------------------------------------------
+//-- Events -----------------------------------------------------------------------------------------------------------------
 
 btnClose.addEventListener('click',  () => closeModal ());
 btnBack.addEventListener('click',  () => closeModal ());
@@ -22,7 +22,7 @@ btnAnterior.addEventListener('click', () => {
     }
 });
 
-//-- Functions --------------------------------------------------------------------------------------------
+//-- Functions --------------------------------------------------------------------------------------------------------------
 
 function getId(domElement) {
     return document.getElementById(domElement)
@@ -55,8 +55,8 @@ function closeModal () {
     modalSheet.setAttribute("style", "background-image: none"); 
 } 
 
-//----------------------------------------------------------------------------------------------
-  
+//---------------------------------------------------------------------------------------------------------------------------
+
 async function openModal (id) {
     try {
         const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR`);
@@ -72,7 +72,6 @@ async function openModal (id) {
             return element
         }
         function apChilds(input = []) {
-            //input.forEach(x=> modalBody.appendChild(x))
             for (let i = 0; i < input.length; i++) {
                 for (let j = 0; j < input[i].length; j++) {
                     j == 0 ? j : input[i][0].appendChild(input[i][j])
@@ -91,16 +90,17 @@ async function openModal (id) {
         
         getId('modal-title').innerHTML = datos.title;
         getId('modal-info-peli').innerHTML = datos.overview;
-        modalSheet.setAttribute("style", `background-image: url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
+        modalSheet.setAttribute("style", `background-image: 
+        url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
         modalSheet.classList.add(isVisible);      
     } catch (error) {
         console.log(error);
     }  
 }
 
-//----------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------
 
-const cargarPeliculas = async () => {
+(async () => {
     try {
         const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
         
@@ -132,8 +132,6 @@ const cargarPeliculas = async () => {
         console.log(error);
     }
     
-}
+})()
 
-cargarPeliculas ();
-
-//----------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------
