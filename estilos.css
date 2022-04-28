@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 body {
@@ -72,4 +73,9 @@ body {
 
 .paginacion button:hover {
   background: #137c32;
+}
+
+iframe {
+  margin: 0;
+  border: 1px solid red;
 }
