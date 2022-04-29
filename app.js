@@ -16,10 +16,10 @@ let foundIds = [];
 let foundPosters = [];
 let pagina = 1;
 
-const contPelis = document.createElement('div');
-contPelis.setAttribute('id','cont-pelis');
-contPelis.setAttribute('class','contenedor');
-contenedor.appendChild(contPelis);
+// const contPelis = document.createElement('div');
+// contPelis.setAttribute('id','cont-pelis');
+// contPelis.setAttribute('class','contenedor');
+// contenedor.appendChild(contPelis);
 
 let total_pages, num=0;
 
@@ -188,6 +188,9 @@ async function openModal (id) {
 
 async function actualizarPeliculas() {
     try {
+        if(!contenedor.classList.contains("contenedor")){
+            contenedor.classList.add("contenedor")
+        }
         const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
         if(respuesta.status === 200) {
             let peliculas = '';
@@ -205,12 +208,11 @@ async function actualizarPeliculas() {
                 </div>
                 `;
                 }
-                contPelis.innerHTML = peliculas;
+                contenedor.innerHTML = peliculas;
             } else if (resultadoBusqueda.length == 0){
+                contenedor.classList.toggle("contenedor");
                 peliculas += `
-                <div>
                     <h2>No se han encontrado resultados para tu búsqueda..</h2>
-                </div>
                 `;
                 contenedor.innerHTML = peliculas;
             }
@@ -234,6 +236,9 @@ async function actualizarPeliculas() {
 
 async function cargarPeliculas() {
     try {
+        if(!contenedor.classList.contains("contenedor")){
+            contenedor.classList.add("contenedor")
+        }
         const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
         if(respuesta.status === 200) {
             let peliculas = '';
@@ -250,7 +255,7 @@ async function cargarPeliculas() {
                 </div>
                 `;
             });
-            contPelis.innerHTML = peliculas;
+            contenedor.innerHTML = peliculas;
 
         } else if(respuesta.status === 401) {
             console.log("Error en la conexion. Bad keyAddress");
