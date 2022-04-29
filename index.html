@@ -1,46 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script defer src="app.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.1/examples/navbar-fixed/"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
     <script
       defer
-      src="./../../../../Lucas Fasolato/Downloads/Bootstrap/bootstrap-5.1.3-examples/assets/dist/js/bootstrap.bundle.min.js"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
     ></script>
-    <meta name="description" content="" />
-    <meta
-      name="author"
-      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
-    />
-    <meta name="generator" content="Hugo 0.88.1" />
-
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"
+    ></script>
     <link
       rel="canonical"
       href="https://getbootstrap.com/docs/5.1/examples/modals/"
     />
 
-    <!-- Bootstrap core CSS -->
-    <link
-      href="file:C:/Users/Lucas%20Fasolato/Downloads/Bootstrap/bootstrap-5.1.3-examples/assets/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-
+    <title>Sitio de peliculas</title>
     <!-- Custom styles for this template -->
     <link href="modal.css" rel="stylesheet" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="estilos.css" />
-    <link href="navbar.html" rel="import" />
+    <link href="estilos.css" rel="stylesheet" />
+    <!-- <link href="navbar.html" rel="import" /> -->
     <link href="navbar-top-fixed.css" rel="stylesheet" />
-    <title>Sitio de peliculas</title>
+    <script defer src="app.js"></script>
   </head>
+  <!-- ---------------------------------------------------------------------------------------------- -->
   <body>
+    <!-- --------------------------------------   NAVBAR   ------------------------------------------------- -->
+    <div class="nav-content">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Pelipedia</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#"
+                  >Inicio</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Lo más visto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contactanos</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Buscar"
+                aria-label="Buscar"
+                id="search-bar"
+              />
+              <button
+                class="btn btn-outline-success"
+                type="submit"
+                id="search-button"
+              >
+                Buscar
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- --------------------------------------  FIN NAVBAR   ------------------------------------------------- -->
+    <!-- --------------------------------------   MODAL   ------------------------------------------------- -->
     <div
       class="display-modal modal modal-sheet position-static d-block bg-secondary py-5"
       role="dialog"
@@ -52,7 +119,6 @@
             <div id="modal-header">
               <h5 class="modal-title" id="modal-title">TITULO DE LA PELI</h5>
             </div>
-
             <button
               type="button"
               class="btn-close"
@@ -65,9 +131,7 @@
             <p id="modal-info-peli">INFO SOBRE LA PELI</p>
           </div>
           <div class="modal-footer flex-column border-top-0">
-            <div id="modal-footer">
-              
-            </div>
+            <div id="modal-footer"></div>
             <button
               type="button"
               class="btn btn-lg btn-light w-100 mx-0"
@@ -80,27 +144,15 @@
         </div>
       </div>
     </div>
-    <iframe src="navbar.html"></iframe>
-    <div class="contenedor" id="contenedor"></div>
-
+    <!-- --------------------------------------  FIN MODAL   ------------------------------------------------- -->
+    <!-- ----------------------------------   CONTENEDOR PELICULAS   ------------------------------------------------- -->
+    <div id="contenedor"></div>
+    <!-- ----------------------------------  FIN CONTENEDOR PELICULAS   ------------------------------------------------- -->
+    <!-- --------------------------------------   PAGINACION   ------------------------------------------------- -->
     <div class="paginacion">
       <button id="btnAnterior">Anterior</button>
       <button id="btnSiguiente">Siguiente</button>
     </div>
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
+    <!-- --------------------------------------  FIN PAGINACION   ------------------------------------------------- -->
   </body>
 </html>

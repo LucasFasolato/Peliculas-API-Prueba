@@ -1,41 +1,35 @@
+//-- Variables --------------------------------------------------------------------------------------------------------------
+
+const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
+       modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack'), 
+       modalHeader = getId('modal-header'), modalSheet = getId('modalSheet'),
+       contenedor = getId('contenedor');
+
+const   searchBar = document.getElementById('search-bar'), 
+        searchButton = document.getElementById('search-button');
+let allTitles = [];
+let allIds = [];
+let allPosters = [];
+let resultadoBusqueda = [];
+let foundTitles = [];
+let foundIds = [];
+let foundPosters = [];
 let pagina = 1;
-const btnAnterior = document.getElementById('btnAnterior');
-const btnSiguiente = document.getElementById('btnSiguiente');
-const modalBody = document.getElementById('modal-body');
-const modalFooter = document.getElementById('modal-footer');
-const btnClose = document.getElementById('btnClose');
+
+const contPelis = document.createElement('div');
+contPelis.setAttribute('id','cont-pelis');
+contPelis.setAttribute('class','contenedor');
+contenedor.appendChild(contPelis);
+
+let total_pages, num=0;
+
+//-- Events -----------------------------------------------------------------------------------------------------------------
+
+searchButton.addEventListener('click', ()=> searchTitles());
+searchBar.oninput = () => inputValue();
+
 btnClose.addEventListener('click',  () => closeModal ());
-
-const btnBack = document.getElementById('btnBack');
 btnBack.addEventListener('click',  () => closeModal ());
-
-function closeModal () {
-    const isVisible = "is-visible";
-    console.log("CERRANDO...");
-    document.getElementById('modalSheet').classList.remove(isVisible);
-    const idioma = document.getElementById("idioma-datos");
-    const duracion = document.getElementById("duracion-datos");
-    const tagline = document.getElementById("tagline-datos");
-    const valoracion = document.getElementById("valoracion-datos");
-    const mirarAhora = document.getElementById('mirarAhora-datos');
-    console.log(document.body.contains(document.getElementById("duracion-datos")));
-    if (document.body.contains(document.getElementById("duracion-datos"))){
-        if (document.body.contains(document.getElementById("idioma-datos"))) {
-            modalBody.removeChild(idioma);
-        }
-        modalBody.removeChild(duracion);   
-        document.getElementById('modal-header').removeChild(tagline);
-        modalBody.removeChild(valoracion);
-        if (document.body.contains(document.getElementById("mirarAhora-datos"))) {
-            modalFooter.removeChild(mirarAhora);
-        }  
-    }
-    document.getElementById('modalSheet').setAttribute("style", "background-image: none"); 
-}
-
-let total_pages;
-let num=0;
-
 btnSiguiente.addEventListener('click', () => {
     if (pagina < total_pages){
         pagina += 1;
@@ -49,82 +43,171 @@ btnAnterior.addEventListener('click', () => {
     }
 });
 
-  
-async function openModal (id) {
-    try {
-        const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR`);
-        console.log(resp);
-        const datos = await resp.json();
-        console.log(datos);
-        const isVisible = "is-visible";
-        console.log("ABRIENDO...");
+//-- Functions --------------------------------------------------------------------------------------------------------------
 
-        const tagline = document.createElement("h6");
-        tagline.innerHTML = `${datos.tagline}`;
-        tagline.setAttribute('id', "tagline-datos");
-        document.getElementById('modal-header').appendChild(tagline);
+function getId(domElement) {
+    return document.getElementById(domElement)
+}
 
-        const idioma = document.createElement("p");
-        if (datos.original_language === "en") {
-            idioma.innerHTML = "Idioma original: Inglés";
-            idioma.setAttribute('id', "idioma-datos");
-            modalBody.appendChild(idioma);
+function timeFormat(time) {
+    if(time<60) return `Duración: ${time} minutos`
+    else if(time>60) {
+        let hour = Math.floor(time/60)
+        let min = time % 60
+        return `Duración: ${hour}h:${min}m`
+    }
+}
+
+function closeModal () {
+    const isVisible = "is-visible", idioma = getId("idioma-datos"), duracion = getId("duracion-datos"), 
+        tagline = getId("tagline-datos"), valoracion = getId("valoracion-datos"), mirarAhora = getId('mirarAhora-datos');
+    modalSheet.classList.remove(isVisible);
+    if (document.body.contains(duracion)){
+        if (document.body.contains(idioma)) {
+            modalBody.removeChild(idioma);
         }
+        modalBody.removeChild(duracion);   
+        modalHeader.removeChild(tagline);
+        modalBody.removeChild(valoracion);
+        if (document.body.contains(mirarAhora)) {
+            modalFooter.removeChild(mirarAhora);
+        }  
+    }
+    modalSheet.setAttribute("style", "background-image: none"); 
+} 
 
-        const duracion = document.createElement("p");
-        duracion.innerHTML = `Duracion: ${datos.runtime} minutos`;
-        duracion.setAttribute('id', "duracion-datos");
-        modalBody.appendChild(duracion);
-        
-        const valoracion = document.createElement("p");
-        valoracion.innerHTML = `Valoracion: ${datos.vote_average}`;
-        valoracion.setAttribute('id', "valoracion-datos");
-        modalBody.appendChild(valoracion);
+function inputValue() {
+    searchTitles();
+};
 
-        const mirarAhora = document.createElement("a");
-        mirarAhora.setAttribute('href', `${datos.homepage}`);
-        mirarAhora.setAttribute('target', "_blank");
-        mirarAhora.setAttribute('id', "mirarAhora-datos");
-        modalFooter.appendChild(mirarAhora);
+function compararInput (data) {
+    resultadoBusqueda = [];
+    resetFounds();
+    let cont = 0, conta = 0;
 
-        const buttonMirarAhora = document.createElement("button");
-        buttonMirarAhora.setAttribute('type', "button");
-        buttonMirarAhora.setAttribute('class', "btn btn-lg btn-primary w-100 mx-0 mb-2");
-        buttonMirarAhora.innerHTML = "MIRAR AHORA";
-        mirarAhora.appendChild(buttonMirarAhora);
-        
-        document.getElementById('modalSheet').setAttribute("style", `background-image: url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
-        document.getElementById('modal-title').innerHTML = datos.title;
-        document.getElementById('modal-info-peli').innerHTML = datos.overview;
-        document.getElementById('modalSheet').classList.add(isVisible);      
+    for (let m = 0; m < 20; m++){
+        if(allTitles[m].includes(data)){
+            resultadoBusqueda[conta] = m;
+            conta++;
+        } 
+    }
+
+    console.log(resultadoBusqueda);
+    
+
+    for (let i = 0; i < resultadoBusqueda.length; i++){
+            foundTitles[cont] = allTitles [resultadoBusqueda[i]];
+            foundIds[cont] = allIds [resultadoBusqueda[i]];
+            foundPosters[cont] = allPosters [resultadoBusqueda[i]];
+            cont++;
+    }
+    console.log(foundIds);
+    console.log(foundTitles);
+    console.log(foundPosters);
+    actualizarPeliculas()
+}
+
+function resetArray() {
+    allTitles = [];
+    allIds = [];
+    allPosters = [];
+}
+
+function resetFounds() {
+    foundTitles = [];
+    foundIds = [];
+    foundPosters = [];
+}
+
+async function searchTitles () {
+    try {
+        resetArray();
+        const resp = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
+        const datos = await resp.json();
+        for(let j=0; j<=19; j++){
+            allTitles.push(datos.results[j].title.toUpperCase());
+            allIds.push(datos.results[j].id);
+            allPosters.push(datos.results[j].poster_path)
+        } 
+        console.log(allTitles);
+        console.log(allIds);
+        console.log(allPosters);
+        if(searchBar.value !== ''){
+            console.log(searchBar.value);
+            compararInput(searchBar.value.toUpperCase());
+        } else {
+            cargarPeliculas();
+        }
     } catch (error) {
         console.log(error);
     }  
-      
 }
 
-const cargarPeliculas = async () => {
+
+//---------------------------------------------------------------------------------------------------------------------------
+
+async function openModal (id) {
     try {
-        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
-        console.log(respuesta);
+        const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR`);
+        const datos = await resp.json();
+        const isVisible = "is-visible";
+
+        function newElement(domElement,info,attributes) {
+            const element = document.createElement(domElement);
+            info === '' ? info : element.innerHTML = `${info}`;
+            for (let i = 0; i < attributes.length; i+=2) {
+                element.setAttribute(attributes[i],attributes[i+1])
+            }
+            return element
+        }
+        function apChilds(input = []) {
+            for (let i = 0; i < input.length; i++) {
+                for (let j = 0; j < input[i].length; j++) {
+                    j == 0 ? j : input[i][0].appendChild(input[i][j])
+                }
+            }
+        }
+
+        let idioma;
+        (datos.original_language === "en") ? idioma = newElement('p',"Idioma original: Inglés",['id','idioma-datos']) : idioma;
+        const tagline = newElement('h6',datos.tagline,['id','tagline-datos']);
+        const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos']);
+        const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos']);
+        const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos"]);
+        const buttonMirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"]);
+        apChilds([[modalBody,idioma,duracion,valoracion],[modalHeader,tagline],[modalFooter,mirarAhora],[mirarAhora,buttonMirarAhora], ]);
         
+        getId('modal-title').innerHTML = datos.title;
+        getId('modal-info-peli').innerHTML = datos.overview;
+        modalSheet.setAttribute("style", `background-image: 
+        url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
+        modalSheet.classList.add(isVisible);      
+    } catch (error) {
+        console.log(error);
+    }  
+}
+
+//---------------------------------------------------------------------------------------------------------------------------
+
+async function actualizarPeliculas() {
+    try {
+        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
         if(respuesta.status === 200) {
             let peliculas = '';
             const datos = await respuesta.json();
-            console.log(datos);
             total_pages = datos.total_pages;
-            datos.results.forEach(pelicula => {
+            for(let i=0; i< resultadoBusqueda.length ; i++) {
                 peliculas += `
-                <div class="pelicula" id=${pelicula.id}>
+                <div class="pelicula" id=${foundIds[i]}>
                     <a  href="#" 
-                        onclick ="closeModal();openModal(${pelicula.id})">
-                        <img class="poster" src="https://image.tmdb.org/t/p/w500/${pelicula.poster_path}">
-                        <h3 class="titulo">${pelicula.title}</h3>
+                        onclick ="closeModal();openModal(${foundIds[i]})">
+                        <img class="poster" src="https://image.tmdb.org/t/p/w500/${foundPosters[i]}">
+                        <h3 class="titulo">${foundTitles[i]}</h3>
                     </a>
                 </div>
                 `;
-            });
-            document.getElementById('contenedor').innerHTML = peliculas;
+            };
+            contPelis.innerHTML = peliculas;
 
         } else if(respuesta.status === 401) {
             console.log("Error en la conexion. Bad keyAddress");
@@ -137,6 +220,44 @@ const cargarPeliculas = async () => {
         console.log(error);
     }
     
-}
+};
 
-cargarPeliculas ();
+//---------------------------------------------------------------------------------------------------------------------------
+
+async function cargarPeliculas() {
+    try {
+        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
+        if(respuesta.status === 200) {
+            let peliculas = '';
+            const datos = await respuesta.json();
+            total_pages = datos.total_pages;
+            datos.results.forEach(pelicula => {
+                peliculas += `
+                <div class="pelicula" id=${pelicula.id}>
+                    <a  href="#" 
+                        onclick ="closeModal();openModal(${pelicula.id})">
+                        <img class="poster" src="https://image.tmdb.org/t/p/w500/${pelicula.poster_path}">
+                        <h3 class="titulo">${pelicula.title}</h3>
+                    </a>
+                </div>
+                `;
+            });
+            contPelis.innerHTML = peliculas;
+
+        } else if(respuesta.status === 401) {
+            console.log("Error en la conexion. Bad keyAddress");
+
+        } else if(respuesta.status === 404) {
+            console.log("No se encontraron las peliculas solicitadas.");
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+    
+};
+
+
+cargarPeliculas();
+
+//---------------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 body {
@@ -12,10 +13,15 @@ body {
   z-index: 1;
 }
 
+.nav-content {
+  height: 0;
+}
+
 .contenedor {
   width: 90%;
   max-width: 1000px;
-  margin: 40px auto 100px auto;
+  margin: 50px auto 100px auto;
+  z-index: 100;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 40px;
@@ -33,12 +39,14 @@ body {
 .contenedor .pelicula .poster {
   width: 100%;
   margin-bottom: 10px;
-  border-radius: 15px;
+  border-radius: 20px;
   cursor: pointer;
+  transition-duration: 0.3s;
 }
 
 .contenedor .pelicula .poster:hover {
   transform: scale(1.03);
+  border-radius: 0;
 }
 
 .paginacion {
@@ -71,4 +79,18 @@ body {
 
 .paginacion button:hover {
   background: #137c32;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
 }
