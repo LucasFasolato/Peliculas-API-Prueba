@@ -101,9 +101,6 @@ function compararInput (data) {
             foundPosters[cont] = allPosters [resultadoBusqueda[i]];
             cont++;
     }
-    console.log(foundIds);
-    console.log(foundTitles);
-    console.log(foundPosters);
     actualizarPeliculas()
 }
 
@@ -196,7 +193,8 @@ async function actualizarPeliculas() {
             let peliculas = '';
             const datos = await respuesta.json();
             total_pages = datos.total_pages;
-            for(let i=0; i< resultadoBusqueda.length ; i++) {
+            if(resultadoBusqueda.length >= 1){
+                for(let i=0; i< resultadoBusqueda.length ; i++) {
                 peliculas += `
                 <div class="pelicula" id=${foundIds[i]}>
                     <a  href="#" 
@@ -206,8 +204,18 @@ async function actualizarPeliculas() {
                     </a>
                 </div>
                 `;
-            };
-            contPelis.innerHTML = peliculas;
+                }
+                contPelis.innerHTML = peliculas;
+            } else if (resultadoBusqueda.length == 0){
+                peliculas += `
+                <div>
+                    <h2>No se han encontrado resultados para tu búsqueda..</h2>
+                </div>
+                `;
+                contenedor.innerHTML = peliculas;
+            }
+            
+            
 
         } else if(respuesta.status === 401) {
             console.log("Error en la conexion. Bad keyAddress");
