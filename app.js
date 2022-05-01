@@ -3,6 +3,7 @@
 const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
        modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack'), 
        modalHeader = getId('modal-header'), modalSheet = getId('modalSheet'), headModal = getId("head-modal"),
+       topRanked = getId('top-ranked'), topView = getId('top-view'),
        contenedor = getId('contenedor');
 
 const   searchBar = document.getElementById('search-bar'), 
@@ -15,6 +16,8 @@ let foundTitles = [];
 let foundIds = [];
 let foundPosters = [];
 let pagina = 1;
+// si modo esta en 0 es pq se trabaja con TOP-VIEW si esta en 1 es pq se trabaja con TOP-RATED
+let modo = 0;
 
 // const contPelis = document.createElement('div');
 // contPelis.setAttribute('id','cont-pelis');
@@ -25,6 +28,9 @@ let total_pages, num=0;
 
 //-- Events -----------------------------------------------------------------------------------------------------------------
 
+topRanked.addEventListener('click', ()=> cargarPeliculas('top_rated'))
+topView.addEventListener('click', ()=> cargarPeliculas('popular'))
+
 searchButton.addEventListener('click', ()=> searchTitles());
 searchBar.oninput = () => inputValue();
 
@@ -33,13 +39,21 @@ btnBack.addEventListener('click',  () => closeModal ());
 btnSiguiente.addEventListener('click', () => {
     if (pagina < total_pages){
         pagina += 1;
-        cargarPeliculas();
+        if (modo === 0){
+            cargarPeliculas('popular');
+        } else if (modo === 1) {
+            cargarPeliculas('top_rated');
+        }
     }
 });
 btnAnterior.addEventListener('click', () => {
     if (pagina > 1){
         pagina -= 1;
-        cargarPeliculas();
+        if (modo === 0){
+            cargarPeliculas('popular');
+        } else if (modo === 1) {
+            cargarPeliculas('top_rated');
+        }
     }
 });
 
@@ -101,7 +115,7 @@ function compararInput (data) {
             foundPosters[cont] = allPosters [resultadoBusqueda[i]];
             cont++;
     }
-    actualizarPeliculas()
+    actualizarPeliculas();
 }
 
 function resetArray() {
@@ -118,8 +132,14 @@ function resetFounds() {
 
 async function searchTitles () {
     try {
+        let type ='';        
+        if (modo === 0){
+            type='popular';
+        } else if (modo === 1) {
+            type ='top_rated';
+        }
         resetArray();
-        const resp = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
+        const resp = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);
         const datos = await resp.json();
         for(let j=0; j<=19; j++){
             allTitles.push(datos.results[j].title.toUpperCase());
@@ -133,7 +153,11 @@ async function searchTitles () {
             console.log(searchBar.value);
             compararInput(searchBar.value.toUpperCase());
         } else {
-            cargarPeliculas();
+            if (modo === 0){
+                cargarPeliculas('popular');
+            } else if (modo === 1) {
+                cargarPeliculas('top_rated');
+            }
         }
     } catch (error) {
         console.log(error);
@@ -188,43 +212,46 @@ async function openModal (id) {
 
 async function actualizarPeliculas() {
     try {
+        let type ='';        
         if(!contenedor.classList.contains("contenedor")){
             contenedor.classList.add("contenedor")
         }
-        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
-        if(respuesta.status === 200) {
-            let peliculas = '';
-            const datos = await respuesta.json();
-            total_pages = datos.total_pages;
-            if(resultadoBusqueda.length >= 1){
-                for(let i=0; i< resultadoBusqueda.length ; i++) {
-                peliculas += `
-                <div class="pelicula" id=${foundIds[i]}>
-                    <a  href="#" 
-                        onclick ="closeModal();openModal(${foundIds[i]})">
-                        <img class="poster" src="https://image.tmdb.org/t/p/w500/${foundPosters[i]}">
-                        <h3 class="titulo">${foundTitles[i]}</h3>
-                    </a>
-                </div>
-                `;
-                }
-                contenedor.innerHTML = peliculas;
-            } else if (resultadoBusqueda.length == 0){
-                contenedor.classList.toggle("contenedor");
-                peliculas += `
-                    <h2>No se han encontrado resultados para tu búsqueda..</h2>
-                `;
-                contenedor.innerHTML = peliculas;
-            }
-            
-            
-
-        } else if(respuesta.status === 401) {
-            console.log("Error en la conexion. Bad keyAddress");
-
-        } else if(respuesta.status === 404) {
-            console.log("No se encontraron las peliculas solicitadas.");
+        if (modo === 0){
+            type='popular';
+        } else if (modo === 1) {
+            type ='top_rated';
         }
+        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
+            if(respuesta.status === 200) {
+                let peliculas = '';
+                const datos = await respuesta.json();
+                total_pages = datos.total_pages;
+                if(resultadoBusqueda.length >= 1){
+                    for(let i=0; i< resultadoBusqueda.length ; i++) {
+                    peliculas += `
+                    <div class="pelicula" id=${foundIds[i]}>
+                        <a  href="#" 
+                            onclick ="closeModal();openModal(${foundIds[i]})">
+                            <img class="poster" src="https://image.tmdb.org/t/p/w500/${foundPosters[i]}">
+                            <h3 class="titulo">${foundTitles[i]}</h3>
+                        </a>
+                    </div>
+                    `;
+                    }
+                    contenedor.innerHTML = peliculas;
+                } else if (resultadoBusqueda.length == 0){
+                    contenedor.classList.toggle("contenedor");
+                    peliculas += `
+                        <h2>No se han encontrado resultados para tu búsqueda..</h2>
+                    `;
+                    contenedor.innerHTML = peliculas;
+                }
+            } else if (respuesta.status === 401) {
+                console.log("Error en la conexion. Bad keyAddress");
+    
+            } else if(respuesta.status === 404) {
+                console.log("No se encontraron las peliculas solicitadas.");
+            }
 
     } catch (error) {
         console.log(error);
@@ -234,12 +261,17 @@ async function actualizarPeliculas() {
 
 //---------------------------------------------------------------------------------------------------------------------------
 
-async function cargarPeliculas() {
+async function cargarPeliculas(type) {
     try {
+        if(type==='popular') {
+            modo = 0;
+        } else if(type==='top_rated') {
+            modo = 1;
+        }
         if(!contenedor.classList.contains("contenedor")){
             contenedor.classList.add("contenedor")
         }
-        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
+        const respuesta = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=81733fbe56cb4b598fe53cdb888c5fe8&language=es-AR&page=${pagina}`);   
         if(respuesta.status === 200) {
             let peliculas = '';
             const datos = await respuesta.json();
@@ -271,6 +303,6 @@ async function cargarPeliculas() {
 };
 
 
-cargarPeliculas();
+cargarPeliculas('popular');
 
 //---------------------------------------------------------------------------------------------------------------------------
