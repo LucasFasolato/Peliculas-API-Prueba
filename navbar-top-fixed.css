@@ -1,7 +1,0 @@
-/* Show it is fixed to the top */
-.nav-content {
-  height: auto;
-  padding-top: 4.5rem;
-  overflow-y: hidden; /* Hide vertical scrollbar */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
-}
