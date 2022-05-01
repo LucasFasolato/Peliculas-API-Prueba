@@ -2,7 +2,7 @@
 
 const  btnAnterior = getId('btnAnterior'), btnSiguiente = getId('btnSiguiente'), modalBody = getId('modal-body'),
        modalFooter = getId('modal-footer'), btnClose = getId('btnClose'), btnBack = getId('btnBack'), 
-       modalHeader = getId('modal-header'), modalSheet = getId('modalSheet'),
+       modalHeader = getId('modal-header'), modalSheet = getId('modalSheet'), headModal = getId("head-modal"),
        contenedor = getId('contenedor');
 
 const   searchBar = document.getElementById('search-bar'), 
@@ -54,7 +54,7 @@ function timeFormat(time) {
     else if(time>60) {
         let hour = Math.floor(time/60)
         let min = time % 60
-        return `Duración: ${hour}h:${min}m`
+        return `Duración: ${hour}h ${min}m`
     }
 }
 
@@ -165,18 +165,18 @@ async function openModal (id) {
             }
         }
 
-        let idioma;
+        let idioma="";
         (datos.original_language === "en") ? idioma = newElement('p',"Idioma original: Inglés",['id','idioma-datos']) : idioma;
         const tagline = newElement('h6',datos.tagline,['id','tagline-datos']);
         const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos']);
         const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos']);
-        const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos"]);
+        const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos", 'class',"w-100"]);
         const buttonMirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"]);
         apChilds([[modalBody,idioma,duracion,valoracion],[modalHeader,tagline],[modalFooter,mirarAhora],[mirarAhora,buttonMirarAhora], ]);
         
         getId('modal-title').innerHTML = datos.title;
         getId('modal-info-peli').innerHTML = datos.overview;
-        modalSheet.setAttribute("style", `background-image: 
+        headModal.setAttribute("style", `background-image: 
         url("https://image.tmdb.org/t/p/w500/${datos.backdrop_path}");background-repeat: no-repeat;background-size: cover`);
         modalSheet.classList.add(isVisible);      
     } catch (error) {

@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 body {
@@ -14,17 +13,20 @@ body {
 }
 
 .nav-content {
+  margin: 0;
+  padding: 0;
   height: 0;
+  width: 100vw;
 }
 
 .contenedor {
-  width: 90%;
-  max-width: 1000px;
+  width: 100%;
+  max-width: 1250px;
   margin: 50px auto 100px auto;
   z-index: 100;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  gap: 50px;
 }
 
 .contenedor .pelicula {
@@ -58,6 +60,7 @@ body {
   justify-content: center;
   gap: 20px;
   padding: 10px;
+  z-index: 100;
 }
 
 .paginacion button {
@@ -98,4 +101,9 @@ body {
 h2 {
   width: 100%;
   text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
 }

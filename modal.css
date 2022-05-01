@@ -1,23 +1,50 @@
 .display-modal {
+  display: block;
   position: fixed;
-  top: -150px;
+  top: 56px;
   left: 0px;
   visibility: hidden;
   opacity: 0;
+  margin: 0px !important;
+  padding: 0px !important;
   transition: all 0.35s ease-in;
   height: 0px;
+  width: max-content;
+  overflow: hidden;
+  z-index: 50;
 }
 
 .display-modal.is-visible {
   visibility: visible;
   opacity: 1;
-  height: auto;
+  height: 100vh;
 }
 
 .modal-dialog {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .btn {
   opacity: 1 !important;
+}
+
+#head-modal {
+  margin: 0px;
+  padding: 0px;
+  min-width: 10%;
+  min-height: 300px;
+  width: auto;
+  height: auto;
+}
+
+#modal-footer {
+  width: 100%;
+}
+
+.modal-content {
+  left: 0px;
+  border: none;
+  border-radius: 0px;
+  margin-top: -28px;
+  height: 55vh;
 }
