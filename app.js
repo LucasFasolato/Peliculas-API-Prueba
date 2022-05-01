@@ -28,8 +28,14 @@ let total_pages, num=0;
 
 //-- Events -----------------------------------------------------------------------------------------------------------------
 
-topRanked.addEventListener('click', ()=> cargarPeliculas('top_rated'))
-topView.addEventListener('click', ()=> cargarPeliculas('popular'))
+topRanked.addEventListener('click', ()=> {
+    pagina=1;
+    cargarPeliculas('top_rated')
+});
+topView.addEventListener('click', ()=> {
+    pagina=1;
+    cargarPeliculas('popular')
+});
 
 searchButton.addEventListener('click', ()=> searchTitles());
 searchBar.oninput = () => inputValue();
