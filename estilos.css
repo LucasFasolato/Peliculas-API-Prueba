@@ -92,9 +92,59 @@ body {
   user-select: none;
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
+  }
+} */
+
+@media (max-width: 650px) {
+  .paginacion {
+    position: fixed;
+    bottom: 0;
+    background: #100a1f;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0px 0px 10px 0px;
+    z-index: 100;
+    gap: 5px;
+    border-radius: 0px;
+  }
+
+  .paginacion button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 50px;
+    width: 50%;
+    background: #241744;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    transition: 0.3s ease all;
+    border-radius: 0px;
+  }
+
+  .paginacion button:hover {
+    background: #137c32;
+  }
+
+  .contenedor {
+    width: 100%;
+    max-width: max-content;
+    margin: 50px auto 100px auto;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .contenedor .pelicula {
+    text-align: center;
+    margin: 10px;
   }
 }
 
@@ -106,4 +156,8 @@ h2 {
 a {
   text-decoration: none;
   color: #000;
+}
+
+#btnBack:hover {
+  background-color: #ccc;
 }

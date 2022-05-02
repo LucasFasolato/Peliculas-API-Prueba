@@ -18,6 +18,9 @@ let foundPosters = [];
 let pagina = 1;
 // si modo esta en 0 es pq se trabaja con TOP-VIEW si esta en 1 es pq se trabaja con TOP-RATED
 let modo = 0;
+let estadoNavResponsive= 0;
+
+const botonCerrarNavResponsive = document.getElementsByClassName('navbar-toggler')[0];
 
 // const contPelis = document.createElement('div');
 // contPelis.setAttribute('id','cont-pelis');
@@ -27,6 +30,19 @@ let modo = 0;
 let total_pages, num=0;
 
 //-- Events -----------------------------------------------------------------------------------------------------------------
+
+botonCerrarNavResponsive.addEventListener('click', (e) =>{
+    e.preventDefault();
+    if(estadoNavResponsive === 0) {
+        estadoNavResponsive = 1;
+        botonCerrarNavResponsive.setAttribute('aria-expanded',"true");
+        document.getElementById('navbarCollapse').style.height = "206px";
+    } else if (estadoNavResponsive === 1) {
+        estadoNavResponsive = 0;
+        botonCerrarNavResponsive.setAttribute('aria-expanded',"false");
+        document.getElementById('navbarCollapse').style.height = "0px";
+    }
+});
 
 topRanked.addEventListener('click', ()=> {
     pagina=1;
@@ -196,13 +212,16 @@ async function openModal (id) {
         }
 
         let idioma="";
-        (datos.original_language === "en") ? idioma = newElement('p',"Idioma original: Inglés",['id','idioma-datos']) : idioma;
+        (datos.original_language === "en") ? idioma = () => {
+            newElement('p',"Idioma original: Inglés",['id','idioma-datos']);
+            apChilds([modalBody, idioma]) 
+        }: null;
         const tagline = newElement('h6',datos.tagline,['id','tagline-datos']);
         const duracion = newElement('p',timeFormat(datos.runtime),['id','duracion-datos']);
         const valoracion = newElement('p',`Valoracion: ${datos.vote_average}`,['id','valoracion-datos']);
         const mirarAhora = newElement('a','',['href',datos.homepage,'target',"_blank",'id',"mirarAhora-datos", 'class',"w-100"]);
         const buttonMirarAhora = newElement('button','MIRAR AHORA',['type','button','class',"btn btn-lg btn-primary w-100 mx-0 mb-2"]);
-        apChilds([[modalBody,idioma,duracion,valoracion],[modalHeader,tagline],[modalFooter,mirarAhora],[mirarAhora,buttonMirarAhora], ]);
+        apChilds([[modalBody,duracion,valoracion],[modalHeader,tagline],[modalFooter,mirarAhora],[mirarAhora,buttonMirarAhora], ]);
         
         getId('modal-title').innerHTML = datos.title;
         getId('modal-info-peli').innerHTML = datos.overview;
