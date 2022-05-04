@@ -58,7 +58,7 @@
     <!-- --------------------------------------   NAVBAR   ------------------------------------------------- -->
     <div class="nav-content">
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
+        <div class="container-fluid" id="nav-content">
           <a class="navbar-brand" href="#">Pelipedia</a>
           <button
             class="navbar-toggler"
@@ -92,6 +92,22 @@
                 >
               </li>
             </ul>
+            <!-- AGREGAR BOTON PARA CAMBIAR A MODO OSCURO -->
+            <div id="btn-modooscuro">
+              <button id="button-sol">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/606/606795.png"
+                  alt="MODO DIA"
+                />
+              </button>
+              <button id="button-luna">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/6702/6702787.png"
+                  alt="MODO NOCHE"
+                />
+              </button>
+            </div>
+
             <form class="d-flex">
               <input
                 class="form-control me-2"
@@ -114,45 +130,53 @@
     </div>
 
     <!-- --------------------------------------  FIN NAVBAR   ------------------------------------------------- -->
-    <!-- --------------------------------------   MODAL   ------------------------------------------------- -->
-    <div
-      class="display-modal modal modal-sheet d-block bg-secondary py-5"
-      role="dialog"
-      id="modalSheet"
-    >
-      <div id="head-modal"></div>
-      <div class="modal-dialog" role="document">
-        <div class="modal-content rounded-6 shadow">
-          <div class="modal-header border-bottom-0">
-            <div id="modal-header">
-              <h5 class="modal-title" id="modal-title">TITULO DE LA PELI</h5>
+    <div class="modals-contenedor">
+      <!-- --------------------------------------   MODAL   ------------------------------------------------- -->
+      <div
+        class="display-modal modal modal-sheet d-block bg-secondary py-5"
+        role="dialog"
+        id="modalSheet"
+      >
+        <div id="head-modal"></div>
+        <div class="modal-dialog" role="document">
+          <div class="modal-content rounded-6 shadow">
+            <div class="modal-header border-bottom-0">
+              <div id="modal-header">
+                <h5 class="modal-title" id="modal-title">TITULO DE LA PELI</h5>
+              </div>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                id="btnClose"
+              ></button>
             </div>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              id="btnClose"
-            ></button>
-          </div>
-          <div class="modal-body py-0" id="modal-body">
-            <p id="modal-info-peli">INFO SOBRE LA PELI</p>
-          </div>
-          <div class="modal-footer flex-column border-top-0">
-            <div id="modal-footer"></div>
-            <button
-              type="button"
-              class="btn btn-lg btn-light w-100 mx-0"
-              data-bs-dismiss="modal"
-              id="btnBack"
+            <div class="modal-body py-0" id="modal-body">
+              <p id="modal-info-peli">INFO SOBRE LA PELI</p>
+            </div>
+            <div
+              class="modal-footer flex-column border-top-0"
+              id="modal-buttons"
             >
-              VOLVER
-            </button>
+              <div id="modal-footer"></div>
+              <button
+                type="button"
+                class="btn btn-lg btn-light w-100 mx-0"
+                data-bs-dismiss="modal"
+                id="btnBack"
+              >
+                VOLVER
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <!-- --------------------------------------  FIN MODAL   ------------------------------------------------- -->
+      <!-- --------------------------------------   MODAL RECOMENDACIONES  ------------------------------------------------- -->
+      <div id="modalRecomendaciones" class="contenedorReco"></div>
+      <!-- --------------------------------------  FIN MODAL RECOMENDACIONES  ------------------------------------------------- -->
     </div>
-    <!-- --------------------------------------  FIN MODAL   ------------------------------------------------- -->
     <!-- ----------------------------------   CONTENEDOR PELICULAS   ------------------------------------------------- -->
     <div id="contenedor" class="contenedor"></div>
     <!-- ----------------------------------  FIN CONTENEDOR PELICULAS   ------------------------------------------------- -->

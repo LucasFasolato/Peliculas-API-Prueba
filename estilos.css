@@ -6,9 +6,8 @@
 
 body {
   font-family: "Montserrat", sans-serif;
-  background: #e0e0e0;
-  color: #1d1d1d;
   width: 100vw;
+  background: #e0e0e0;
   z-index: 1;
 }
 
@@ -20,15 +19,22 @@ body {
 }
 
 .contenedor {
+  visibility: hidden;
   width: 100%;
   max-width: 1250px;
   margin: 50px auto 100px auto;
   z-index: 100;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  transition: all 0.35s ease-in;
   gap: 50px;
+  background-color: #e0e0e0;
 }
 
+.contenedor.visibility {
+  visibility: visible;
+  height: 100vh;
+}
 .contenedor .pelicula {
   text-align: center;
 }
@@ -139,12 +145,33 @@ body {
     z-index: 100;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    height: 0px;
     gap: 15px;
   }
 
   .contenedor .pelicula {
     text-align: center;
     margin: 10px;
+  }
+
+  .contenedorReco {
+    position: fixed;
+    background-color: #e0e0e0;
+    height: 0px;
+    margin-top: -8px;
+    margin-left: 0px !important;
+    z-index: 55;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0px;
+    visibility: hidden;
+    opacity: 1;
+    transition: all 0.35s ease-in;
+    width: 100% !important;
+  }
+  .contenedorReco.is-visible {
+    visibility: visible;
+    height: 100vh;
   }
 }
 
@@ -160,4 +187,98 @@ a {
 
 #btnBack:hover {
   background-color: #ccc;
+}
+
+#btn-modooscuro {
+  display: flex;
+  gap: 0px;
+  margin: 0px 40px;
+  padding: 0px;
+  /* border: 3px solid #fff; */
+  border-radius: 30%;
+  align-items: center;
+}
+
+#btn-modooscuro img {
+  max-width: 30px;
+  max-height: 30px;
+  margin: 0px;
+  padding: 2px;
+}
+
+#btn-modooscuro button {
+  border-radius: 50%;
+  margin: 5px;
+}
+
+#btn-modooscuro #button-sol {
+  border-radius: 50%;
+  border: 1px solid #000;
+  outline: 3px solid #fff;
+  width: 38px;
+  height: 38px;
+}
+#btn-modooscuro #button-luna {
+  border: 1px solid #000;
+  outline: 3px solid #fff;
+  width: 38px;
+  height: 38px;
+}
+
+.modo-dia {
+  background: #e0e0e0 !important;
+  color: #1d1d1d !important;
+}
+
+.modo-noche {
+  background: #121212 !important;
+  color: #eee !important;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.contenedorReco {
+  position: absolute;
+  height: 0px;
+  margin-top: -8px;
+  margin-left: 35%;
+  z-index: 55;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0px;
+  visibility: hidden;
+  opacity: 1;
+  transition: all 0.35s ease-in;
+  width: 60%;
+  background-color: #e0e0e0;
+}
+
+.contenedorReco.is-visible {
+  visibility: visible;
+  height: 100vh;
+}
+.contenedorReco .pelicula {
+  text-align: center;
+}
+
+.contenedorReco .pelicula .titulo {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.contenedorReco .pelicula .poster {
+  width: 100%;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+.contenedorReco .pelicula .poster:hover {
+  transform: scale(1.03);
+}
+
+.titulo {
+  background-color: #e0e0e0;
 }
